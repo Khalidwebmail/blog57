@@ -31,6 +31,27 @@
                     </p>
                 </router-link>
             </li>
+
+
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-cogs"></i>
+                <p>
+                    Management
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <router-link to="/users" class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>Users</p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
+
             <li class="nav-header">MULTI LEVEL EXAMPLE</li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
