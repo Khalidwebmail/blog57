@@ -1908,33 +1908,61 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     loadUsers: function loadUsers() {
-      var self = this;
+      var vm = this;
       axios.get("api/user").then(function (response) {
         // console.log(response.data)
-        self.users = response.data;
-        console.log(self.users);
+        vm.users = response.data; // console.log(self.users)
       })["catch"](function () {
         console.log(error);
       });
     },
     createUser: function createUser() {
+      var _this = this;
+
       this.$Progress.start();
-      this.form.post('/api/user');
-      $('#addNewUser').modal('hide');
+      this.form.post('/api/user').then(function () {
+        Fire.$emit('AfterCreate');
+        $('#addNewUser').modal('hide');
+        swal.fire({
+          type: 'success',
+          title: 'User Created in successfully'
+        });
+
+        _this.$Progress.finish();
+      })["catch"](function () {});
+    },
+    deleteUser: function deleteUser(id) {
+      var _this2 = this;
+
       swal.fire({
-        type: 'success',
-        title: 'User Created in successfully'
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        // Send request to the server
+        if (result.value) {
+          _this2.form["delete"]('api/user/' + id).then(function () {
+            swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+            Fire.$emit('AfterCreate');
+          })["catch"](function () {
+            swal.fire("Failed!", "There was something wronge.", "warning");
+          });
+        }
       });
-      this.$Progress.finish();
     }
   },
   created: function created() {
-    var _this = this;
+    var _this3 = this;
 
-    this.loadUsers();
-    setInterval(function () {
-      return _this.loadUsers();
-    }, 2000);
+    this.loadUsers(); // setInterval(() => this.loadUsers(), 2000);
+
+    Fire.$on('AfterCreate', function () {
+      _this3.loadUsers();
+    });
   }
 });
 
@@ -63091,7 +63119,23 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(_vm._f("upText")(user.type)))]),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _c("td", [
+                    _vm._m(2, true),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger btn-xs",
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteUser(user.id)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-trash-alt" })]
+                    )
+                  ])
                 ])
               }),
               0
@@ -63416,15 +63460,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("a", { staticClass: "btn btn-info btn-xs", attrs: { href: "" } }, [
-        _c("i", { staticClass: "fas fa-pencil-alt" })
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "btn btn-danger btn-xs", attrs: { href: "" } }, [
-        _c("i", { staticClass: "fas fa-trash-alt" })
-      ])
-    ])
+    return _c(
+      "a",
+      { staticClass: "btn btn-info btn-xs", attrs: { href: "" } },
+      [_c("i", { staticClass: "fas fa-pencil-alt" })]
+    )
   },
   function() {
     var _vm = this
@@ -78770,6 +78810,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('myDate', function (created) {
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('upText', function (text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 });
+window.Fire = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_2___default.a, {
   color: 'rgb(143, 255, 199)',
   failedColor: 'red',

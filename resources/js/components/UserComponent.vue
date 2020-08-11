@@ -31,7 +31,7 @@
                                 <td>{{user.type | upText}}</td>
                                 <td>
                                     <a href="" class="btn btn-info btn-xs"><i class="fas fa-pencil-alt"></i></a>
-                                    <a href="" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-xs" @click="deleteUser(user.id)"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -125,12 +125,12 @@
         methods: {
             loadUsers(){
 
-                let self  = this
+                let vm  = this
                 axios.get("api/user")
                 .then(function(response) {
                     // console.log(response.data)
-                    self.users = response.data
-                    console.log(self.users)
+                    vm.users = response.data
+                    // console.log(self.users)
                 })
                 .catch(function(){
                     console.log(error)
@@ -140,17 +140,53 @@
             createUser() {
                 this.$Progress.start();
                 this.form.post('/api/user')
-                $('#addNewUser').modal('hide')
-                swal.fire({
-                    type: 'success',
-                    title: 'User Created in successfully'
+                .then(() => {
+                    Fire.$emit('AfterCreate')
+                    $('#addNewUser').modal('hide')
+                    swal.fire({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                    })
+                    this.$Progress.finish();
                 })
-                this.$Progress.finish();
+                .catch(() => {
+
+                })
+            },
+
+            deleteUser(id){
+                swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.form.delete('api/user/'+id).then(()=>{
+                                        swal.fire(
+                                        'Deleted!',
+                                        'Your file has been deleted.',
+                                        'success'
+                                        )
+                                    Fire.$emit('AfterCreate');
+                                }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                });
+                         }
+                    })
             }
         },
         created() {
             this.loadUsers();
-            setInterval(() => this.loadUsers(), 2000);
+            // setInterval(() => this.loadUsers(), 2000);
+            Fire.$on('AfterCreate', ()=> {
+                this.loadUsers()
+            });
         }
     }
 </script>
