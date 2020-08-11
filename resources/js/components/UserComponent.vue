@@ -18,15 +18,17 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Type</th>
+                                <th>Created at</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="user in users.data" :key="user.id">
+                            <tr v-for="user in users" :key="user.id">
                                 <td>{{user.id}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
-                                <td>{{user.type}}</td>
+                                <td>{{user.created_at | myDate}}</td>
+                                <td>{{user.type | upText}}</td>
                                 <td>
                                     <a href="" class="btn btn-info btn-xs"><i class="fas fa-pencil-alt"></i></a>
                                     <a href="" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i></a>
@@ -121,7 +123,16 @@
 
         methods: {
             loadUsers(){
-                axios.get("api/user").then(({ data }) => (this.users = data));
+
+                var vm  = this
+                axios.get("api/user")
+                .then(function(response) {
+                    console.log(response.data)
+                    vm.users = response.data
+                })
+                .catch(function(){
+                    console.log(error)
+                })
             },
 
             createUser() {
