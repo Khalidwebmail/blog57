@@ -23,8 +23,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="user in users" :key="user.id">
-                                <td>{{user.id}}</td>
+                            <tr v-for="(user, index) in users" :key="user.id">
+                                <td>{{index+1}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.created_at | myDate}}</td>
@@ -124,11 +124,12 @@
         methods: {
             loadUsers(){
 
-                var vm  = this
+                let self  = this
                 axios.get("api/user")
                 .then(function(response) {
-                    console.log(response.data)
-                    vm.users = response.data
+                    // console.log(response.data)
+                    self.users = response.data
+                    console.log(self.users)
                 })
                 .catch(function(){
                     console.log(error)
@@ -136,13 +137,14 @@
             },
 
             createUser() {
+                this.$Progress.start();
                 this.form.post('/api/user')
-                .then(() => {
-
+                $('#addNewUser').modal('hide')
+                swal.fire({
+                    type: 'success',
+                    title: 'User Created in successfully'
                 })
-                .catch(() => {
-
-                })
+                this.$Progress.finish();
             }
         },
         created() {
