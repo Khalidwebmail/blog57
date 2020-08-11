@@ -6,7 +6,7 @@
                 <h3 class="card-title">User list</h3>
 
                 <div class="card-tools">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#addNewUser"><i class="fas fa-user-plus fa-fw"></i></button>
+                    <button class="btn btn-success" @click="newModal()" data-toggle="modal" data-target="#addNewUser"><i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -30,7 +30,7 @@
                                 <td>{{user.created_at | myDate}}</td>
                                 <td>{{user.type | upText}}</td>
                                 <td>
-                                    <a href="" class="btn btn-info btn-xs"><i class="fas fa-pencil-alt"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-info btn-xs" @click="editModal(user)"><i class="fas fa-pencil-alt"></i></a>
                                     <a href="javascript:void(0)" class="btn btn-danger btn-xs" @click="deleteUser(user.id)"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
@@ -49,7 +49,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addNewUserLabel">Add user</h5>
+                        <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
+                        <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -109,6 +110,7 @@
     export default {
         data() {
             return {
+                editmode: false,
                 users : {},
                 form: new Form({
                     name : '',
@@ -154,6 +156,19 @@
                 })
             },
 
+            newModal(){
+                this.editmode = false;
+                this.form.reset();
+                $('#addNewUser').modal('show');
+            },
+
+            editModal(user){
+                this.editmode = true;
+                this.form.reset();
+                $('#addNewUser').modal('show');
+                this.form.fill(user);
+
+            },
             deleteUser(id){
                 swal.fire({
                     title: 'Are you sure?',
