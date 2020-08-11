@@ -1929,7 +1929,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    var _this = this;
+
     this.loadUsers();
+    setInterval(function () {
+      return _this.loadUsers();
+    }, 2000);
   }
 });
 

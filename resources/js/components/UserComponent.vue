@@ -105,6 +105,7 @@
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -148,7 +149,8 @@
             }
         },
         created() {
-            this.loadUsers()
+            this.loadUsers();
+            setInterval(() => this.loadUsers(), 2000);
         }
     }
 </script>
