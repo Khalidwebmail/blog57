@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('api');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -79,6 +79,11 @@ class UserController extends Controller
         // dd($request->all());
         $user->update($request->all());
         return ['message' => 'Updated the user info'];
+    }
+
+    public function profile()
+    {
+        return auth('api')->user();
     }
 
     /**

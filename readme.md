@@ -68,5 +68,20 @@ window.swal = Swal;
         require('./components/passport/PersonalAccessTokens.vue').default
     );
 
+10-create component DeveloperComponent and paste below these tags
+    <passport-clients></passport-clients>
+    <passport-authorized-clients></passport-authorized-clients>
+    <passport-personal-access-tokens></passport-personal-access-tokens>
+11- Add below this lib in Kernel.php
+    \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
 
-Use every api controller ($this->middleware('auth:api')) to protect unwanted access
+12-Open UserController and put $this->middleware('auth:api'); in construct
+
+
+
+
+
+
+
+
+Use every api controller ($this->middleware('api')) to protect unwanted access

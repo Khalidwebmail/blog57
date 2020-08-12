@@ -120,7 +120,7 @@
                     password: '',
                     type: '',
                     bio: '',
-                    // photo: ''
+                    photo: ''
                 })
 
             }
