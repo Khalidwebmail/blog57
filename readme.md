@@ -36,3 +36,37 @@ npm install --save sweetalert2
 
 import Swal from 'sweetalert2'
 window.swal = Swal;
+
+/********************************************
+        Use laravel passport for API
+*********************************************/
+1-composer require laravel/passport
+2-php .\artisan vendor:publish --tag=passport-migrations
+3-php artisan migrate
+4-php artisan passport:install
+5-Though we use API for user login so use HasApiToken trait in user model (App\User)
+6-Passport::routes(); in boot method on AuthServiceProvider and use Laravel\Passport\Passport;
+7- Goto auth.php in guards section
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+    ],
+8-php artisan vendor:publish --tag=passport-components
+9- put below these component in app.js
+    Vue.component(
+        'passport-clients',
+        require('./components/passport/Clients.vue').default
+    );
+
+    Vue.component(
+        'passport-authorized-clients',
+        require('./components/passport/AuthorizedClients.vue').default
+    );
+
+    Vue.component(
+        'passport-personal-access-tokens',
+        require('./components/passport/PersonalAccessTokens.vue').default
+    );
+
+
+Use every api controller ($this->middleware('auth:api')) to protect unwanted access
