@@ -55,7 +55,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="createUser">
+                    <form @submit.prevent="editmode ? updateUser() : createUser()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <input v-model="form.name" type="text" name="name"
@@ -96,7 +96,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button v-show="!editmode" type="submit" class="btn btn-primary">Add</button>
+                            <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
                         </div>
                     </form>
                 </div>
@@ -113,6 +114,7 @@
                 editmode: false,
                 users : {},
                 form: new Form({
+                    id:'',
                     name : '',
                     email: '',
                     password: '',
@@ -169,6 +171,27 @@
                 this.form.fill(user);
 
             },
+
+            updateUser(){
+                this.$Progress.start();
+                this.form.put('api/user/'+this.form.id)
+
+                .then(()=> {
+                    // console.log(this.form.id)
+                    $('#addNewUser').modal('hide');
+                    swal.fire(
+                        'Updated!',
+                        'Information has been updated.',
+                        'success'
+                    )
+                    this.$Progress.finish();
+                    Fire.$emit('AfterCreate');
+                })
+                .catch(()=> {
+                    this.$Progress.fail();
+                })
+            },
+
             deleteUser(id){
                 swal.fire({
                     title: 'Are you sure?',
