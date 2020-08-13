@@ -10,7 +10,7 @@
                             <h5 class="widget-user-desc text-right">Web Designer</h5>
                         </div>
                         <div class="widget-user-image">
-                            <img class="img-circle" src="" alt="User Avatar">
+                            <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
                         </div>
                         <div class="card-footer">
                             <div class="row">
@@ -156,6 +156,59 @@
             console.log('Component mounted.')
         },
 
+        methods:{
+
+            getProfilePhoto(){
+                return "img/profile/"+ this.form.photo;
+            },
+
+            updateInfo(){
+                this.form.put('api/profile/')
+                .then(()=>{
+
+                })
+                .catch(()=>{
+
+                })
+            },
+
+            updateInfo(){
+                this.$Progress.start();
+                if(this.form.password == ''){
+                    this.form.password = undefined;
+                }
+                this.form.put('api/profile')
+                .then(()=>{
+                     Fire.$emit('AfterCreate');
+                    this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+            },
+
+            updateProfile(e) {
+
+                let file = e.target.files[0];
+                // console.log(file)
+                let reader = new FileReader();
+
+                let limit = 1024  * 1024 * 2;
+                if(file['size'] > limit){
+                    swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'You are uploading a large file',
+                    })
+                    return false;
+                }
+
+                reader.onloadend = (file) => {
+                    this.form.photo = reader.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        },
         created() {
             axios.get("api/profile")
             .then(({ data }) => (this.form.fill(data)));
