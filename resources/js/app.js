@@ -32,6 +32,7 @@ window.swal = Swal;
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 
 import router from "./router"
@@ -89,6 +90,14 @@ Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue').default
 );
+
+Vue.component(
+    'not-found',
+    require('./components/NotFoundComponent.vue').default
+);
+
+
+
 
 const app = new Vue({
     el: '#app',
