@@ -1956,13 +1956,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: (_methods = {
     getProfilePhoto: function getProfilePhoto() {
-      return "img/profile/" + this.form.photo;
+      var photo = this.form.photo.length > 200 ? this.form.photo : "img/profile/" + this.form.photo;
+      return photo; // return "img/profile/"+ this.form.photo;
     },
     updateInfo: function updateInfo() {
-      this.form.put('api/profile/').then(function () {})["catch"](function () {});
+      var _this = this;
+
+      this.form.put('api/profile/').then(function () {
+        Fire.$emit('AfterCreate');
+
+        _this.$Progress.finish();
+      })["catch"](function () {
+        _this.$Progress.fail();
+      });
     }
   }, _defineProperty(_methods, "updateInfo", function updateInfo() {
-    var _this = this;
+    var _this2 = this;
 
     this.$Progress.start();
 
@@ -1973,12 +1982,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.form.put('api/profile').then(function () {
       Fire.$emit('AfterCreate');
 
-      _this.$Progress.finish();
+      _this2.$Progress.finish();
     })["catch"](function () {
-      _this.$Progress.fail();
+      _this2.$Progress.fail();
     });
   }), _defineProperty(_methods, "updateProfile", function updateProfile(e) {
-    var _this2 = this;
+    var _this3 = this;
 
     var file = e.target.files[0]; // console.log(file)
 
@@ -1995,17 +2004,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
 
     reader.onloadend = function (file) {
-      _this2.form.photo = reader.result;
+      _this3.form.photo = reader.result;
     };
 
     reader.readAsDataURL(file);
   }), _methods),
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     axios.get("api/profile").then(function (_ref) {
       var data = _ref.data;
-      return _this3.form.fill(data);
+      return _this4.form.fill(data);
     });
   }
 });

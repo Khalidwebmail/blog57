@@ -159,16 +159,20 @@
         methods:{
 
             getProfilePhoto(){
-                return "img/profile/"+ this.form.photo;
+
+                var photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/"+ this.form.photo;
+                return photo;
+                // return "img/profile/"+ this.form.photo;
             },
 
             updateInfo(){
                 this.form.put('api/profile/')
                 .then(()=>{
-
+                    Fire.$emit('AfterCreate');
+                    this.$Progress.finish();
                 })
                 .catch(()=>{
-
+                    this.$Progress.fail();
                 })
             },
 
