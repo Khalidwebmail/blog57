@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
+        'email' => $faker->unique()->freeEmail,
         'bio' => $faker->realText(),
         'type' => $faker->randomElement(['user', 'admin', 'author']),
         'email_verified_at' => now(),

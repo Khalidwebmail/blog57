@@ -35,6 +35,8 @@ Vue.component(AlertError.name, AlertError)
 
 
 import router from "./router"
+import Gate from "./Gate"
+Vue.prototype.$gate = new Gate(window.user)
 
 
 Vue.filter('myDate',function(created){

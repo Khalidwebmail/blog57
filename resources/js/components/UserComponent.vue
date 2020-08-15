@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" v-if="$gate.isAdmin()">
         <div class="col-12">
             <div class="card">
               <div class="card-header">
@@ -17,8 +17,8 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Type</th>
                                 <th>Created at</th>
+                                <th>Type</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -129,16 +129,19 @@
         methods: {
             loadUsers(){
 
+
                 let vm  = this
-                axios.get("api/user")
-                .then(function(response) {
-                    // console.log(response.data)
-                    vm.users = response.data
-                    // console.log(self.users)
-                })
-                .catch(function(){
-                    console.log(error)
-                })
+                if(this.$gate.isAdmin()) {
+                    axios.get("api/user")
+                    .then(function(response) {
+                        // console.log(response.data)
+                        vm.users = response.data
+                        // console.log(self.users)
+                    })
+                    .catch(function(){
+                        console.log(error)
+                    })
+                }
             },
 
             createUser() {

@@ -78,9 +78,14 @@ window.swal = Swal;
 12-Open UserController and put $this->middleware('auth:api'); in construct
 
 
+/************Create role base permission***************/
 
-
-
+1-Create 3 gates in AuthServiceProvider.php
+2-Create file gate.js and import in app.js
+3-Use this gate.js in master.blade.php
+4-Implete ment gate in sidebar using @can
+5-In user component write (v-if="$gate.isAdmin()") beside row and write (this.$gate.isAdmin()) in loadUsers() using if condition
+6-
 
 
 

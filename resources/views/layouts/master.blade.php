@@ -46,6 +46,11 @@
 </div>
 <!-- ./wrapper -->
 
+@auth
+    <script>
+        window.user = @json(auth()->user())
+    </script>
+@endauth
 <!-- jQuery -->
     <script src="{{asset('js/app.js')}}"></script>
 </body>
